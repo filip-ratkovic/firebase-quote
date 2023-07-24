@@ -1,0 +1,44 @@
+:root {
+    /* COLORS  */
+
+    --white: rgb(245, 244, 245);
+    --black: #19191c;
+    --green:#2e9959;
+    --lGreen: #6bb771;
+    
+    --bg:#e6e7ea;
+
+     /* dark   */
+       --bg : rgb(44, 44, 44);
+      --primary: #2e9959;
+      --pr-l:#6bb771;
+      --text : #f5f5f5 ;
+      --grey: #e1e0dc;
+      --sec:#dceae6;
+
+       /* light   */
+
+       --bg : #e6e7ea;
+      --primary: #2e9959;
+      --pr-l:#6bb771;
+      --text : #19191c ;
+      /* --grey: #e1e0dc;   */
+
+     /* GRADIENT */
+
+     --lg-dark:linear-gradient(90deg,#e4e0dc  0% , #d3d1cb  65% ,#e1e0dc 100%);
+     --lg-light:linear-gradient(90deg,#2e9959 0% , #1ec260 65% , #2e9959  100%);
+     
+     /* SHADOWS */
+ 
+     --shadow-black: 0 1px 4px rgba(0, 0, 0, 0.3);
+     --shadow-green:  0 2px 6px rgba(46, 153, 89, 0.3);
+     --shadow-white:  0 2px 5px rgba(139, 136, 136, 0.3);
+
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}

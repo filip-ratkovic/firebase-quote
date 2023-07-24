@@ -1,0 +1,12 @@
+.quote-details {
+    display: flex;
+    justify-content: center;
+    margin-top: 50px;
+    height: 100%;
+}
+
+.quote-details-card {
+    width: 550px;
+    max-width: 90%;
+    padding: 15px;
+}
