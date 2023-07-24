@@ -1,8 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { themeSlice } from "../../Store/themeSlice";
 import { useNavigate } from "react-router-dom";
-import { InputLabel, MenuItem, Select, Switch } from "@mui/material";
+import { MenuItem, Select, Switch } from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -14,7 +14,8 @@ import { styled } from "@mui/material/styles";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { auth, logout } from "../../Config/firebase";
 import { useTranslation } from "react-i18next";
-import i18next from "i18next";
+
+import "./nav.css"
 
 function Nav() {
   const themeState = useSelector((state) => state.theme);
@@ -25,13 +26,6 @@ function Nav() {
   console.log(userAuth);
 
   const { i18n, t } = useTranslation(["nav"]);
-
-  useEffect(() => {
-    if (localStorage.getItem("i18nextLng")?.length > 2) {
-      i18next.changeLanguage("en");
-      console.log(localStorage)
-    }
-  }, []);
 
   const handleLangChange = (e) => {
     i18n.changeLanguage(e.target.value);
@@ -126,8 +120,8 @@ function Nav() {
             </Typography>
 
             <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
+              // labelId="demo-simple-select-label"
+              // id="demo-simple-select"
               label="en"
               value={localStorage.getItem("i18nextLng")}
 							onChange={handleLangChange}
