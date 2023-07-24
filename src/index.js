@@ -8,6 +8,7 @@ import "@fontsource/roboto/700.css";
 import { BrowserRouter } from "react-router-dom";
 import { Provider } from "react-redux";
 import {store} from "./Store/store"
+import "./i18n"
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
