@@ -2,7 +2,6 @@ import React from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate } from "react-router-dom";
-// import jwtDecode from "jwt-decode";
 import { useDispatch, useSelector } from "react-redux";
 // import { authSlice } from "../../Store/authSlice";
 import Layout from "../../Containers/Layout";
@@ -14,10 +13,10 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { TextField, Button, Box, Typography, useTheme } from "@mui/material";
+import { TextField, Button, Box, Typography, useTheme, Container } from "@mui/material";
 import { authSlice } from "../../Store/authSlice";
 import { store } from "../../Store/store";
-
+import "./signUp.css"
 const SignUpSchema = yup.object({
   email: yup
     .string()
@@ -35,20 +34,27 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const signUpSubmit = async (values) => {
-    await signUp(values.email, values.password)
+    try {
+      await signUp(values.email, values.password)
+    } catch (error) {
+      alert(error);
+    }
   };
 
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
     } catch (error) {
-      console.log(error);
+      alert(error);
     }
   };
 
   const HandleLogout = async () => {
-    await logout()
-  };
+    try {
+      await logout();
+    } catch (error) {
+      alert(error);
+    }  };
 
   return (
     <Layout>
@@ -68,13 +74,14 @@ const SignUp = () => {
           handleBlur,
           handleSubmit,
         }) => (
-          <div>
+          <Container style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
             <Typography variant="h4" color="primary" gutterBottom>
               Sign in
             </Typography>
-            <Box my={1}>
+            <Box my={1} >
               <TextField
-                variant="outlined"
+              style={{width:"400px"}}
+                variant="standard"
                 label="Email"
                 type="email"
                 name="email"
@@ -87,6 +94,7 @@ const SignUp = () => {
                       borderColor: theme.palette.primary.main,
                     },
                   },
+                  width:"500px"
                 }}
               />
               <Typography variant="body1" color="error">
@@ -95,7 +103,8 @@ const SignUp = () => {
             </Box>
             <Box my={1}>
               <TextField
-                variant="outlined"
+                style={{width:"400px"}}
+                variant="standard"
                 label="Password"
                 type="password"
                 name="password"
@@ -114,7 +123,8 @@ const SignUp = () => {
                 {errors.password && touched.password && errors.password}
               </Typography>
             </Box>
-            <Button onClick={handleSubmit} type="button" variant="contained">
+            <Button onClick={handleSubmit} type="button" variant="contained"               style={{width:"400px"}}
+>
               Sign in
             </Button>
 
@@ -122,14 +132,17 @@ const SignUp = () => {
               onClick={signInWithGoogle}
               type="button"
               variant="contained"
+              style={{width:"400px"}}
+
             >
               Sign in with Google
             </Button>
 
-            <Button onClick={HandleLogout} type="button" variant="contained">
+            <Button onClick={HandleLogout} type="button" variant="contained"               style={{width:"400px"}}
+>
               Logout
             </Button>
-          </div>
+          </Container>
         )}
       </Formik>
     </Layout>
