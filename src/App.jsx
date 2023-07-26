@@ -1,4 +1,4 @@
-import React, { Suspense } from "react";
+import React from "react";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -18,7 +18,6 @@ function App() {
   const selectedTheme = themeState.theme === "light" ? themeLight : themeDark;
 
   return (
-    <Suspense>
       <ThemeProvider theme={selectedTheme}>
         <Routes>
           <Route path="/" element={<AllQuotes />} />
@@ -30,7 +29,6 @@ function App() {
           <Route path="/password" element={<Password />} />
         </Routes>
       </ThemeProvider>
-    </Suspense>
   );
 }
 

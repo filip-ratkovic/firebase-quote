@@ -1,18 +1,11 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import * as yup from "yup";
+import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-// import { authSlice } from "../../Store/authSlice";
 import Layout from "../../Containers/Layout";
 import "./signUp.css"
 
-import { auth, googleProvider, logout, signUp } from "../../Config/firebase";
-import {
-  createUserWithEmailAndPassword,
-  signInWithPopup,
-  signOut,
-} from "firebase/auth";
+import { signInWithGoogle, signUp } from "../../Config/firebase";
 
 import {
   TextField,
@@ -27,27 +20,32 @@ import {
   Input,
   FormControl,
 } from "@mui/material";
-import { authSlice } from "../../Store/authSlice";
-import { store } from "../../Store/store";
-import "./signUp.css";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-const SignUpSchema = yup.object({
-  email: yup
+import { useSelector } from "react-redux";
+
+const SignUpSchema = Yup.object({
+  email: Yup
     .string()
     .required("Email je obavezno polje, unesite email")
     .email("Email format nije dobar"),
-  password: yup
+  password: Yup
     .string()
     .required("Sifra je obavezno polje, unesite sifru")
     .min(6, "Sifra mora da ima najmanje 6 karaktera")
     .max(50, "Sifra mora da ima najvise 50 karaktera"),
-});
+  confirm_password: Yup
+    .string()
+    .label("confirm password")
+    .required()
+    .oneOf([Yup.ref('password'), null], 'Passwords must match')});
 
 const SignUp = () => {
-  const [showPassword, setShowPassword] = React.useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const theme = useTheme();
   const navigate = useNavigate();
+  const authState = useSelector((state) => state.auth)
+  console.log(authState, "authState")
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -58,25 +56,16 @@ const SignUp = () => {
   const signUpSubmit = async (values) => {
     try {
       await signUp(values.email, values.password);
-      navigate("/")
+      navigate("/");
     } catch (error) {
       alert(error);
     }
   };
 
-  const signInWithGoogle = async () => {
+  const signInWithGoogleHandler = async () => {
     try {
-      await signInWithPopup(auth, googleProvider);
-      navigate("/")
-    } catch (error) {
-      alert(error);
-    }
-  };
-
-  const HandleLogout = async () => {
-    try {
-      await logout();
-      navigate("/")
+      await signInWithGoogle();
+      navigate("/");
     } catch (error) {
       alert(error);
     }
@@ -85,7 +74,7 @@ const SignUp = () => {
   return (
     <Layout>
       <Formik
-        initialValues={{ email: "", password: "" }}
+        initialValues={{ email: "", password: "", confirm_password: "" }}
         validationSchema={SignUpSchema}
         onSubmit={(values, actions) => {
           signUpSubmit(values);
@@ -124,7 +113,7 @@ const SignUp = () => {
                   "& label": {
                     color: "grey",
                   },
-                 
+
                   // "& .MuiFormLabel-root.Mui-focused": {
                   //     color: 'blue'
                   // },
@@ -137,7 +126,6 @@ const SignUp = () => {
             <Box my={1}>
               <FormControl variant="standard">
                 <InputLabel
-                  htmlFor="standard-adornment-password"
                   sx={{ color: "grey" }}
                 >
                   Password
@@ -149,6 +137,47 @@ const SignUp = () => {
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.password}
+                  type={showPassword ? "text" : "password"}
+                  sx={{
+                    "& label": {
+                      color: "grey",
+                    },
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        sx={{ color: "grey" }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+
+              <Typography variant="body2" color="error">
+                {errors.password && touched.password && `* ${errors.password}`}
+              </Typography>
+            </Box>
+
+            <Box my={1}>
+              <FormControl variant="standard">
+                <InputLabel
+                  htmlFor="standard-adornment-password"
+                  sx={{ color: "grey" }}
+                >
+                  Confirm Password
+                </InputLabel>
+                <Input
+                  style={{ width: "400px" }}
+                  label="Confirm password"
+                  name="confirm_password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.confirm_password}
                   id="standard-adornment-password"
                   type={showPassword ? "text" : "password"}
                   sx={{
@@ -170,35 +199,50 @@ const SignUp = () => {
                   }
                 />
               </FormControl>
+
               <Typography variant="body2" color="error">
-                {errors.password && touched.password && `* ${errors.password}`}
+                {errors.confirm_password && touched.confirm_password && `* ${errors.confirm_password}`}
               </Typography>
             </Box>
-            <Box mt={5} sx={{display:'flex', justifyContent:"space-between", width:"410px", gap:"30px"}}>
-            <Button
-              onClick={handleSubmit}
-              type="button"
-              variant="contained"
-              style={{ width: "50%" }}
-            >
-              Sign up
-            </Button>
 
-            <Button
-              onClick={signInWithGoogle}
-              type="button"
-              variant="contained"
-              style={{ width: "50%",
+            <Box
+              mt={5}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "410px",
+                gap: "30px",
+              }}
+            >
+              <Button
+                onClick={handleSubmit}
+                type="button"
+                variant="contained"
+                style={{ width: "50%" }}
+              >
+                Sign up
+              </Button>
+
+              <Button
+                onClick={signInWithGoogleHandler}
+                type="button"
+                variant="contained"
+                style={{
+                  width: "50%",
                   backgroundColor: theme.palette.text.primary,
-                  color:theme.palette.background
-            }}
-            >
-              Sign up with Google
-            </Button>
-
+                  color: theme.palette.background,
+                }}
+              >
+                Sign up with Google
+              </Button>
             </Box>
-            <Link to={"/login"} className="link" style={{color:theme.palette.text.secondary}}>Have an account already? <span>Log in</span></Link>
-            
+            <Link
+              to={"/login"}
+              className="link"
+              style={{ color: theme.palette.text.secondary }}
+            >
+              Have an account already? <span>Log in</span>
+            </Link>
           </Container>
         )}
       </Formik>

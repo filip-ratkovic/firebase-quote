@@ -1,10 +1,7 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
-import jwtDecode from "jwt-decode";
-import { useDispatch, useSelector } from "react-redux";
-import { authSlice } from "../../Store/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 import Layout from "../../Containers/Layout";
 
 import {
@@ -13,8 +10,15 @@ import {
   Box,
   Typography,
   useTheme,
+  Container,
+  FormControl,
+  InputLabel,
+  Input,
+  InputAdornment,
+  IconButton,
 } from "@mui/material";
-import { auth, login, resetPassword } from "../../Config/firebase";
+import { login, resetPassword, signInWithGoogle } from "../../Config/firebase";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 const loginSchema = yup.object({
   email: yup
@@ -30,103 +34,185 @@ const loginSchema = yup.object({
 
 const Login = () => {
   const [forgotPassword, setForgotPassword] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const theme = useTheme();
 
-  const submitLogin = async (values) => {
-    try{
-      await login(values.email, values.password);
-    navigate("/");
-    } catch (error) {
-        setForgotPassword(true)
-        alert(error.message)
-        alert(error.code)
-    }
-};
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-const forgotPasswordHandler = async (data) => {
- try{
- await resetPassword(data)
-  alert(data)
- } catch (error) {
-  alert(error.message,  "error paswod", error.code)
- }
-}
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
+  const signInWithGoogleHandler = async () => {
+    try {
+      await signInWithGoogle();
+      navigate("/");
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  const submitLogin = async (values) => {
+    try {
+      await login(values.email, values.password);
+      navigate("/");
+    } catch (error) {
+      setForgotPassword(true);
+      alert(error.message);
+    }
+  };
+
+  const forgotPasswordHandler = async (data) => {
+    try {
+      await resetPassword(data);
+      alert(`We sent a password reset email on ${data}`);
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   return (
-    <Layout        
-    >
+    <Layout>
       <Formik
         initialValues={{ email: "", password: "" }}
         validationSchema={loginSchema}
         onSubmit={(values, actions) => {
           submitLogin(values);
         }}
-        style={{backgroundColor: theme.palette.secondary.main}}
+        style={{ backgroundColor: theme.palette.secondary.main }}
       >
         {({
-          values, 
+          values,
           errors,
           touched,
           handleChange,
           handleBlur,
           handleSubmit,
         }) => (
-          <div>
-            <Typography variant="h4" color="primary" gutterBottom>
-              Login page
+          <Container
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="h3" color="primary" gutterBottom mb={5}>
+              Log in
             </Typography>
             <Box my={1}>
               <TextField
-                variant="outlined"
+                variant="standard"
                 label="Email"
                 type="email"
                 name="email"
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                style={{ width: "400px" }}
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: theme.palette.primary.main,
-                    },
+                  "& label": {
+                    color: "grey",
                   },
+
+                  // "& .MuiFormLabel-root.Mui-focused": {
+                  //     color: 'blue'
+                  // },
                 }}
               />
-              <Typography variant="body1" color="error">
-                {errors.email && touched.email && errors.email}
+              <Typography variant="body2" color="error">
+                {errors.email && touched.email && `* ${errors.email}`}
               </Typography>
             </Box>
             <Box my={1}>
-              <TextField
-                variant="outlined"
-                label="Password"
-                type="password"
-                name="password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                // className="login-input"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: theme.palette.primary.main,
+              <FormControl variant="standard">
+                <InputLabel
+                  htmlFor="standard-adornment-password"
+                  sx={{ color: "grey" }}
+                >
+                  Password
+                </InputLabel>
+                <Input
+                  style={{ width: "400px" }}
+                  label="Password"
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  id="standard-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  sx={{
+                    "& label": {
+                      color: "grey",
                     },
-                  },
-                }}
-              />
-                    {forgotPassword &&
-                     (<Typography style={{color:"blue", cursor:"pointer"}} onClick={()=> forgotPasswordHandler(values.email)}>Forgot password ?</Typography>)}
-
-              <Typography variant="body1" color="error">
-                {errors.password && touched.password && errors.password}
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        sx={{ color: "grey" }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              <Typography variant="body2" color="error">
+                {errors.password && touched.password && `* ${errors.password}`}
               </Typography>
+
+              {forgotPassword && (
+                <Typography
+                  style={{ color: "blue", cursor: "pointer" }}
+                  onClick={() => forgotPasswordHandler(values.email)}
+                >
+                  Forgot password ?
+                </Typography>
+              )}
             </Box>
-            <Button onClick={handleSubmit} type="button" variant="contained">
-              Submit
-            </Button>
-          </div>
+            <Box
+              mt={5}
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                width: "410px",
+                gap: "30px",
+              }}
+            >
+              <Button
+                onClick={handleSubmit}
+                type="button"
+                variant="contained"
+                style={{ width: "50%" }}
+              >
+                Log in
+              </Button>
+
+              <Button
+                onClick={signInWithGoogleHandler}
+                type="button"
+                variant="contained"
+                style={{
+                  width: "50%",
+                  backgroundColor: theme.palette.text.primary,
+                  color: theme.palette.background,
+                }}
+              >
+                Log in with Google
+              </Button>
+            </Box>
+            <Link
+              to={"/signup"}
+              className="link"
+              style={{ color: theme.palette.text.secondary }}
+            >
+              Don't have an account? <span>Sign up</span>
+            </Link>
+          </Container>
         )}
       </Formik>
     </Layout>

@@ -1,6 +1,5 @@
 
 import firebase from 'firebase/compat/app';
-import { initializeApp } from "firebase/app";
 import {createUserWithEmailAndPassword, getAuth, GoogleAuthProvider, sendPasswordResetEmail, 
   signInWithEmailAndPassword, signInWithPopup, signOut, updatePassword} from "firebase/auth"
 import { getFirestore, collection, getDocs, addDoc, doc, deleteDoc, getDoc, updateDoc } from "firebase/firestore";
@@ -39,6 +38,7 @@ export const signUp = async (email, password) => {
       token: user.accessToken,
     })
   );
+
   return user;
 };
 
@@ -91,6 +91,7 @@ export const login = async (email, password) => {
       token: user.accessToken,
     })
   );
+
   return user
 }
 
