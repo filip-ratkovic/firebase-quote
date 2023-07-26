@@ -1,7 +1,8 @@
 {
 	"home": "Pocetna",
 	"password": "Sifra",
-	"login": "Profile",
+	"login": "Prijavi se",
+	"logout": "Odjavi me",
 	"favorites": "Omiljeno",
-	"SignUp": "Regustruj"
+	"SignUp": "Regustruj se"
 }

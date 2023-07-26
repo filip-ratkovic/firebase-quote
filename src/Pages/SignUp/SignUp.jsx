@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 // import { authSlice } from "../../Store/authSlice";
 import Layout from "../../Containers/Layout";
+import "./signUp.css"
 
 import { auth, googleProvider, logout, signUp } from "../../Config/firebase";
 import {
@@ -13,10 +14,23 @@ import {
   signOut,
 } from "firebase/auth";
 
-import { TextField, Button, Box, Typography, useTheme, Container } from "@mui/material";
+import {
+  TextField,
+  Button,
+  Box,
+  Typography,
+  useTheme,
+  Container,
+  InputLabel,
+  InputAdornment,
+  IconButton,
+  Input,
+  FormControl,
+} from "@mui/material";
 import { authSlice } from "../../Store/authSlice";
 import { store } from "../../Store/store";
-import "./signUp.css"
+import "./signUp.css";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 const SignUpSchema = yup.object({
   email: yup
     .string()
@@ -30,12 +44,21 @@ const SignUpSchema = yup.object({
 });
 
 const SignUp = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+
   const theme = useTheme();
   const navigate = useNavigate();
 
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   const signUpSubmit = async (values) => {
     try {
-      await signUp(values.email, values.password)
+      await signUp(values.email, values.password);
+      navigate("/")
     } catch (error) {
       alert(error);
     }
@@ -44,6 +67,7 @@ const SignUp = () => {
   const signInWithGoogle = async () => {
     try {
       await signInWithPopup(auth, googleProvider);
+      navigate("/")
     } catch (error) {
       alert(error);
     }
@@ -52,9 +76,11 @@ const SignUp = () => {
   const HandleLogout = async () => {
     try {
       await logout();
+      navigate("/")
     } catch (error) {
       alert(error);
-    }  };
+    }
+  };
 
   return (
     <Layout>
@@ -74,13 +100,18 @@ const SignUp = () => {
           handleBlur,
           handleSubmit,
         }) => (
-          <Container style={{display:"flex", alignItems:"center", flexDirection:"column"}}>
-            <Typography variant="h4" color="primary" gutterBottom>
-              Sign in
+          <Container
+            style={{
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+            }}
+          >
+            <Typography variant="h3" color="primary" gutterBottom mb={5}>
+              Sign up
             </Typography>
-            <Box my={1} >
+            <Box my={1}>
               <TextField
-              style={{width:"400px"}}
                 variant="standard"
                 label="Email"
                 type="email"
@@ -88,60 +119,86 @@ const SignUp = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
+                style={{ width: "400px" }}
                 sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: theme.palette.primary.main,
-                    },
+                  "& label": {
+                    color: "grey",
                   },
-                  width:"500px"
+                 
+                  // "& .MuiFormLabel-root.Mui-focused": {
+                  //     color: 'blue'
+                  // },
                 }}
               />
-              <Typography variant="body1" color="error">
-                {errors.email && touched.email && errors.email}
+              <Typography variant="body2" color="error">
+                {errors.email && touched.email && `* ${errors.email}`}
               </Typography>
             </Box>
             <Box my={1}>
-              <TextField
-                style={{width:"400px"}}
-                variant="standard"
-                label="Password"
-                type="password"
-                name="password"
-                onChange={handleChange}
-                onBlur={handleBlur}
-                value={values.password}
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    "& fieldset": {
-                      borderColor: theme.palette.primary.main,
+              <FormControl variant="standard">
+                <InputLabel
+                  htmlFor="standard-adornment-password"
+                  sx={{ color: "grey" }}
+                >
+                  Password
+                </InputLabel>
+                <Input
+                  style={{ width: "400px" }}
+                  label="Password"
+                  name="password"
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                  value={values.password}
+                  id="standard-adornment-password"
+                  type={showPassword ? "text" : "password"}
+                  sx={{
+                    "& label": {
+                      color: "grey",
                     },
-                  },
-                }}
-              />
-              <Typography variant="body1" color="error">
-                {errors.password && touched.password && errors.password}
+                  }}
+                  endAdornment={
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label="toggle password visibility"
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        sx={{ color: "grey" }}
+                      >
+                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              <Typography variant="body2" color="error">
+                {errors.password && touched.password && `* ${errors.password}`}
               </Typography>
             </Box>
-            <Button onClick={handleSubmit} type="button" variant="contained"               style={{width:"400px"}}
->
-              Sign in
+            <Box mt={5} sx={{display:'flex', justifyContent:"space-between", width:"410px", gap:"30px"}}>
+            <Button
+              onClick={handleSubmit}
+              type="button"
+              variant="contained"
+              style={{ width: "50%" }}
+            >
+              Sign up
             </Button>
 
             <Button
               onClick={signInWithGoogle}
               type="button"
               variant="contained"
-              style={{width:"400px"}}
-
+              style={{ width: "50%",
+                  backgroundColor: theme.palette.text.primary,
+                  color:theme.palette.background
+            }}
             >
-              Sign in with Google
+              Sign up with Google
             </Button>
 
-            <Button onClick={HandleLogout} type="button" variant="contained"               style={{width:"400px"}}
->
-              Logout
-            </Button>
+            </Box>
+            <Link to={"/login"} className="link" style={{color:theme.palette.text.secondary}}>Have an account already? <span>Log in</span></Link>
+            
           </Container>
         )}
       </Formik>

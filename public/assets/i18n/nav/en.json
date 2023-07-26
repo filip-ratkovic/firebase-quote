@@ -1,7 +1,8 @@
 {
 	"home": "Home",
 	"password": "Password",
-	"login": "Login",
+	"login": "Log in",
+	"logout": "Log out",
 	"favorites": "Favorites",
-	"SignUp": "SignUp"
+	"SignUp": "Sign Up"
 }

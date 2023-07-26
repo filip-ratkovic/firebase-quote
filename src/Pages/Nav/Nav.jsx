@@ -137,7 +137,7 @@ function Nav() {
                 variant="outlined"
                 onClick={logout}
               >
-                Logout
+                {t("logout")}
               </Button>
             ) : (
               <Button
@@ -145,7 +145,7 @@ function Nav() {
                 variant="outlined"
                 onClick={() => navigate("/login")}
               >
-                Login
+               {t("login")}
               </Button>
             )}
             <Button color="inherit" onClick={() => navigate("/signup")}>
