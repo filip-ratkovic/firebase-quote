@@ -44,7 +44,7 @@ export const signUp = async (email, password) => {
 
 export  const signInWithGoogle = async () => {
   try {
-    const userCredential = await signInWithPopup(auth, googleProvider);
+     const userCredential = await signInWithPopup(auth, googleProvider);
     const user = userCredential.user
     store.dispatch(
       authSlice.actions.setData({
