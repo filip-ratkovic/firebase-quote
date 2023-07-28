@@ -127,7 +127,7 @@ function Nav() {
 							onChange={handleLangChange}
               className="nav-select"
             >
-              <MenuItem value={"en"} selected >ENG</MenuItem>
+              <MenuItem value={"en"}>ENG</MenuItem>
               <MenuItem value={"sr"}>SRB</MenuItem>
             </Select>
 

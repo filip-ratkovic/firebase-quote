@@ -8,13 +8,13 @@ import { authSlice } from "../Store/authSlice";
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCZbvHP50FUFP1jWcOvuAZqPSozPXgrA0c",
-  authDomain: "fir-quote-2d6d2.firebaseapp.com",
-  projectId: "fir-quote-2d6d2",
-  storageBucket: "fir-quote-2d6d2.appspot.com",
-  messagingSenderId: "389974120391",
-  appId: "1:389974120391:web:7d1d9b8f714304ac2cebe2",
-  measurementId: "G-LZ40G3GJ2S"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID
 };
 
 const app = firebase.initializeApp(firebaseConfig);
