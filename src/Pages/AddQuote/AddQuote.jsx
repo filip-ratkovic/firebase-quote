@@ -45,7 +45,7 @@ const AddQuote = () => {
  useEffect(()=> {
   if (!userEmail) {
     navigate("/");
-    alert("nemate pristup");
+    alert("Nemate pristup");
   }
  })
   return (

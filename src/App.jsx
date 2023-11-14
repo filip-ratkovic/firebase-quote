@@ -17,6 +17,9 @@ function App() {
   const themeState = useSelector((state) => state.theme);
   const selectedTheme = themeState.theme === "light" ? themeLight : themeDark;
 
+  // TODO
+  // Prevod na eng;
+
   return (
       <ThemeProvider theme={selectedTheme}>
         <Routes>
