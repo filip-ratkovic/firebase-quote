@@ -105,23 +105,15 @@ function Nav() {
             <Typography
               variant="h6"
               component="div"
-              sx={{ cursor: "pointer", m: "10px" }}
+              sx={{flexGrow: 1, cursor: "pointer", m: "10px" }}
+
               onClick={() => navigate("/password")}
             >
               {t("password")}
             </Typography>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{ flexGrow: 1, cursor: "pointer", m: "10px" }}
-              onClick={() => navigate("/favorites")}
-            >
-              {t("favorites")}
-            </Typography>
+         
 
             <Select
-              // labelId="demo-simple-select-label"
-              // id="demo-simple-select"
               label="en"
               value={localStorage.getItem("i18nextLng")}
 							onChange={handleLangChange}

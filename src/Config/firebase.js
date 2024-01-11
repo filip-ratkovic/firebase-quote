@@ -73,9 +73,10 @@ export const resetPassword = async (email) => {
 }
 
 export const updateNewPassword = async(newPassword) => {
-    try{ 
-      await updatePassword(newPassword);
-   
+  console.log(newPassword)
+  const user = auth.currentUser
+  try{ 
+      await updatePassword(user, newPassword);
     } catch(error) {
       alert(error.message)
     }
