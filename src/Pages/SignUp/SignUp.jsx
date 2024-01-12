@@ -94,12 +94,15 @@ const SignUp = () => {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
+              maxWidth:"100%",
+              padding:"10px"
             }}
           >
             <Typography variant="h3" color="primary" gutterBottom mb={5}>
               Sign up
             </Typography>
-            <Box my={1}>
+            <Box my={1}
+            style={{ maxWidth:"100%"}}>
               <TextField
                 variant="standard"
                 label="Email"
@@ -108,7 +111,7 @@ const SignUp = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
-                style={{ width: "400px" }}
+                style={{ width: "400px",maxWidth:"100%" }}
                 sx={{
                   "& label": {
                     color: "grey",
@@ -123,15 +126,16 @@ const SignUp = () => {
                 {errors.email && touched.email && `* ${errors.email}`}
               </Typography>
             </Box>
-            <Box my={1}>
-              <FormControl variant="standard">
+            <Box my={1} style={{maxWidth:"100%"}}>
+              <FormControl variant="standard"
+              style={{maxWidth:"100%"}}>
                 <InputLabel
-                  sx={{ color: "grey" }}
+                  sx={{ color: "grey",maxWidth:"100%" }}
                 >
                   Password
                 </InputLabel>
                 <Input
-                  style={{ width: "400px" }}
+                  style={{ width: "400px", maxWidth:"100%" }}
                   label="Password"
                   name="password"
                   onChange={handleChange}
@@ -163,16 +167,18 @@ const SignUp = () => {
               </Typography>
             </Box>
 
-            <Box my={1}>
-              <FormControl variant="standard">
+            <Box my={1}
+            style={{maxWidth:"100%"}}>
+              <FormControl variant="standard"
+              style={{ maxWidth:"100%"}}  >
                 <InputLabel
                   htmlFor="standard-adornment-password"
-                  sx={{ color: "grey" }}
+                  sx={{ color: "grey", maxWidth:"100%"}}
                 >
                   Confirm Password
                 </InputLabel>
                 <Input
-                  style={{ width: "400px" }}
+                  style={{ width: "400px", maxWidth:"100%"}}
                   label="Confirm password"
                   name="confirm_password"
                   onChange={handleChange}
@@ -212,6 +218,7 @@ const SignUp = () => {
                 justifyContent: "space-between",
                 width: "410px",
                 gap: "30px",
+                maxWidth:"100%"
               }}
             >
               <Button

@@ -7,6 +7,12 @@
 
 .quote-details-card {
     width: 550px;
-    max-width: 90%;
+    max-width: 100%;
     padding: 15px;
+}
+
+@media (max-width:480px) {
+    .css-1wzuv1j{
+        padding: 40px 10px !important;
+    }
 }

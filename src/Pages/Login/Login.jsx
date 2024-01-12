@@ -96,12 +96,14 @@ const Login = () => {
               display: "flex",
               alignItems: "center",
               flexDirection: "column",
+               maxWidth:"100%"
             }}
+            
           >
             <Typography variant="h3" color="primary" gutterBottom mb={5}>
               Log in
             </Typography>
-            <Box my={1}>
+            <Box my={1} style={{maxWidth:"100%"}}>
               <TextField
                 variant="standard"
                 label="Email"
@@ -110,7 +112,7 @@ const Login = () => {
                 onChange={handleChange}
                 onBlur={handleBlur}
                 value={values.email}
-                style={{ width: "400px" }}
+                style={{ width: "400px", maxWidth:"100%"}}
                 sx={{
                   "& label": {
                     color: "grey",
@@ -125,16 +127,17 @@ const Login = () => {
                 {errors.email && touched.email && `* ${errors.email}`}
               </Typography>
             </Box>
-            <Box my={1}>
-              <FormControl variant="standard">
+            <Box my={1} style={{width:"100%"}}>
+              <FormControl variant="standard" style={{width:"100%"}} >
                 <InputLabel
+                style={{width:"100%"}}
                   htmlFor="standard-adornment-password"
                   sx={{ color: "grey" }}
                 >
                   Password
                 </InputLabel>
                 <Input
-                  style={{ width: "400px" }}
+                style={{ width: "400px",maxWidth:"100%" }}
                   label="Password"
                   name="password"
                   onChange={handleChange}
@@ -181,6 +184,7 @@ const Login = () => {
                 justifyContent: "space-between",
                 width: "410px",
                 gap: "30px",
+                maxWidth:"100%"
               }}
             >
               <Button
