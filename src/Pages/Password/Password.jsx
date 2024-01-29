@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { auth, updateNewPassword } from "../../Config/firebase";
+import { updateNewPassword } from "../../Config/firebase";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Layout from "../../Containers/Layout";
 
-import { current } from "@reduxjs/toolkit";
 import {
-  TextField,
   Button,
   Box,
   Typography,

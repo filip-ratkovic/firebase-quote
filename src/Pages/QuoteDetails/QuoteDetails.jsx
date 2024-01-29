@@ -16,7 +16,6 @@ import {
   useTheme,
   Button,
 } from "@mui/material";
-import { shadows } from '@mui/system';
 import {
   FormatQuote as QuotationMarkIcon,
   Favorite as LikedIcon,
@@ -101,7 +100,6 @@ function QuoteDetails() {
       <Card
       sx={{boxShadow:"0px 4px 16px rgba(0,0,0,0.1)", backgroundColor: theme.palette.secondary.main
       }}
-        // style={{ backgroundColor: theme.palette.secondary.main }}
         className="quote-details-card"
       >
         <CardContent sx={{ display: "flex", flexWrap: "nowrap" }}>

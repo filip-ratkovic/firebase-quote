@@ -6,7 +6,6 @@ import Loading from "../Loading/Loading";
 import QuotesCard from "../../Components/QuotesCard/QuotesCard";
 import { Fab, Grid } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import { useTheme } from "@emotion/react";
 import Layout from "../../Containers/Layout";
 import { useNavigate } from "react-router-dom";
 import {auth, getQuotes} from "../../Config/firebase"
@@ -14,7 +13,6 @@ import {auth, getQuotes} from "../../Config/firebase"
 function AllQuotes() {
   const [quotes, setQuotes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const theme = useTheme();
   const navigate = useNavigate()
 
   const userEmail = auth?.currentUser?.email;

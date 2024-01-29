@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Formik } from "formik";
 import * as yup from "yup";
 import { useNavigate, useParams } from "react-router-dom";
-import { addQuote, getQuoteById, updateQuoteData } from "../../Config/firebase";
+import {  getQuoteById, updateQuoteData } from "../../Config/firebase";
 import Layout from "../../Containers/Layout";
 
 import { TextField, Button, Box, Typography, useTheme } from "@mui/material";

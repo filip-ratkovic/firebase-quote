@@ -127,7 +127,7 @@ const Login = () => {
                 {errors.email && touched.email && `* ${errors.email}`}
               </Typography>
             </Box>
-            <Box my={1} style={{width:"100%"}}>
+            <Box my={1} style={{maxWidth:"100%"}}>
               <FormControl variant="standard" style={{width:"100%"}} >
                 <InputLabel
                 style={{width:"100%"}}
