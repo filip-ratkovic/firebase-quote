@@ -2,22 +2,39 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { themeSlice } from "../../Store/themeSlice";
 import { useNavigate } from "react-router-dom";
-import { MenuItem, Select, Switch } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import { styled } from "@mui/material/styles";
-import FormControlLabel from "@mui/material/FormControlLabel";
 import { auth, logout } from "../../Config/firebase";
 import { useTranslation } from "react-i18next";
+import {
+  MenuItem,
+  Switch,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  IconButton,
+  styled,
+  FormControlLabel,
+  ToggleButton,
+  ToggleButtonGroup,
+  Avatar,
+  Menu,
+  ListItemIcon,
+  Divider,
+  Tooltip,
+} from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Language as LanguageIcon,
+  Key as KeyIcon,
+  Person as PersonAdd,
+  Settings as SettingsIcon,
+  Logout,
+} from "@mui/icons-material";
 
-import "./nav.css"
+import "./nav.css";
 
 function Nav() {
+  const [alignment, setAlignment] = React.useState("web");
   const themeState = useSelector((state) => state.theme);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -29,7 +46,20 @@ function Nav() {
 
   const handleLangChange = (e) => {
     i18n.changeLanguage(e.target.value);
-    console.log(e.target.value)
+    console.log(e.target.value);
+  };
+
+  const handleChange = (event, newAlignment) => {
+    setAlignment(newAlignment);
+  };
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
   };
 
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -97,52 +127,115 @@ function Nav() {
             <Typography
               variant="h6"
               component="div"
-              sx={{ cursor: "pointer", m: "10px" }}
+              sx={{ cursor: "pointer", m: "10px", marginRight: "auto" }}
               onClick={() => navigate("/")}
             >
               {t("home")}
             </Typography>
-            <Typography
-              variant="h6"
-              component="div"
-              sx={{flexGrow: 1, cursor: "pointer", m: "10px" }}
-
-              onClick={() => navigate("/password")}
-            >
-              {t("password")}
-            </Typography>
-         
-
-            <Select
-              label="en"
-              value={localStorage.getItem("i18nextLng")}
-							onChange={handleLangChange}
-              className="nav-select"
-            >
-              <MenuItem value={"en"}>ENG</MenuItem>
-              <MenuItem value={"sr"}>SRB</MenuItem>
-            </Select>
-
-            {authState.id || userAuth ? (
-              <Button
-                style={{ color: "white" }}
-                variant="outlined"
-                onClick={logout}
+            <Tooltip title="Account settings">
+              <IconButton
+                onClick={handleClick}
+                size="small"
+                sx={{ ml: 2 }}
+                aria-controls={open ? "account-menu" : undefined}
+                aria-haspopup="true"
+                aria-expanded={open ? "true" : undefined}
               >
-                {t("logout")}
-              </Button>
-            ) : (
-              <Button
-                style={{ color: "white" }}
-                variant="outlined"
-                onClick={() => navigate("/login")}
-              >
-               {t("login")}
-              </Button>
-            )}
-            <Button color="inherit" onClick={() => navigate("/signup")}>
-            {t("SignUp")}
-            </Button>
+                <Avatar sx={{ width: 32, height: 32 }}>
+                  <SettingsIcon />
+                </Avatar>
+              </IconButton>
+            </Tooltip>
+            <Menu
+              anchorEl={anchorEl}
+              id="account-menu"
+              open={open}
+              onClose={handleClose}
+              onClick={handleClose}
+              PaperProps={{
+                elevation: 0,
+                sx: {
+                  backgroundColor: "#93a0a3",
+                  overflow: "visible",
+                  filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                  mt: 1.5,
+                  "& .MuiAvatar-root": {
+                    width: 32,
+                    height: 32,
+                    ml: -0.5,
+                    mr: 1,
+                  },
+                  "&::before": {
+                    content: '""',
+                    display: "block",
+                    position: "absolute",
+                    top: 0,
+                    right: 14,
+                    width: 10,
+                    height: 10,
+                    bgcolor: "none",
+                    transform: "translateY(-50%) rotate(45deg)",
+                    zIndex: 0,
+                  },
+                },
+              }}
+              transformOrigin={{ horizontal: "right", vertical: "top" }}
+              anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+            >
+              <MenuItem onClick={handleClose}>
+                <KeyIcon />
+                <Typography
+                  variant="p"
+                  component="div"
+                  sx={{ cursor: "pointer", m: "10px" }}
+                  onClick={() => navigate("/password")}
+                >
+                  {t("password")}
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <LanguageIcon />
+
+                <Box sx={{ ml: "10px" }}>
+                  <ToggleButtonGroup
+                    color="primary"
+                    value={localStorage.getItem("i18nextLng")}
+                    exclusive
+                    onChange={handleLangChange}
+                    aria-label="ENG"
+                  >
+                    <ToggleButton value="en">ENG</ToggleButton>
+                    <ToggleButton value="sr">SRB</ToggleButton>
+                  </ToggleButtonGroup>
+                </Box>
+              </MenuItem>
+              <Divider />
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <PersonAdd fontSize="small" />
+                </ListItemIcon>
+                <Typography color="inherit" onClick={() => navigate("/signup")}>
+                  {t("SignUp")}
+                </Typography>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <ListItemIcon>
+                  <Logout fontSize="small" />
+                </ListItemIcon>
+                {authState.id || userAuth ? (
+                  <Typography variant="outlined" onClick={logout}>
+                    {t("logout")}
+                  </Typography>
+                ) : (
+                  <Typography
+                    variant="outlined"
+                    onClick={() => navigate("/login")}
+                  >
+                    {t("login")}
+                  </Typography>
+                )}{" "}
+              </MenuItem>
+            </Menu>
             <FormControlLabel
               control={
                 <MaterialUISwitch
