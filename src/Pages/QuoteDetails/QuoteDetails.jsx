@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
+  auth,
   deleteQuote,
   getQuoteById,
   likeQuote,
@@ -36,8 +37,11 @@ function QuoteDetails() {
   const params = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
+  const userEmail = auth?.currentUser?.email;
 
   const getQuoteData = () => {
+  if(userEmail) {
+
     getQuoteById(params.id)
       .then((data) => {
         setQuote(data);
@@ -47,6 +51,10 @@ function QuoteDetails() {
       .catch((error) => {
         console.log(error);
       });
+  } else {
+    alert('Prijavite se')
+    navigate("/login")
+  }
   };
 
   useEffect(() => {
