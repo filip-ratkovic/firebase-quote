@@ -141,7 +141,7 @@ function QuoteDetails() {
               color="text.secondary"
               marginLeft="10px"
             >
-              {quote.likes} likes
+              {quote.likes} likes.
             </Typography>
           </Box>
           <Box>
